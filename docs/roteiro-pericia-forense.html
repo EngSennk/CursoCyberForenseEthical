@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro — Perícia Judicial &amp; Computação Forense</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#0B0E13;
+    --bg-elev:#12161D;
+    --border:#242B36;
+    --text:#E7EAEE;
+    --text-dim:#8B94A3;
+    --text-faint:#6C7683;
+    --amber:#D4A657;
+    --teal:#5FB8B0;
+    --done:#6FCF97;
+    --danger:#C4715F;
+    --radius:6px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:40px 20px 72px;}
+
+  .head{margin-bottom:32px;}
+  .head h1{font-size:clamp(24px,5vw,32px);font-weight:700;margin:0 0 12px;letter-spacing:-0.01em;}
+  .lede{color:var(--text-dim);font-size:14.5px;max-width:58ch;margin:0 0 22px;}
+
+  .progress-block{border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;background:var(--bg-elev);}
+  .progress-track{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin-bottom:10px;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--teal));width:0%;transition:width .4s ease;}
+  .progress-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .progress-meta span{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12.5px;color:var(--text-dim);}
+  .reset-btn{background:none;border:1px solid var(--border);color:var(--text-faint);font-family:'IBM Plex Mono',monospace;font-size:11.5px;padding:5px 10px;border-radius:4px;cursor:pointer;transition:border-color .15s,color .15s;}
+  .reset-btn:hover{border-color:var(--text-dim);color:var(--text-dim);}
+  .reset-btn.confirm{border-color:var(--danger);color:var(--danger);}
+
+  .phase-divider{display:flex;align-items:baseline;gap:12px;margin:32px 0 14px;}
+  .phase-divider:first-child{margin-top:0;}
+  .phase-divider .label{font-size:13px;color:var(--text-dim);white-space:nowrap;}
+  .phase-divider .line{flex:1;height:1px;background:var(--border);}
+  .phase-divider .duration{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);border:1px solid var(--border);padding:2px 8px;border-radius:999px;white-space:nowrap;}
+
+  .module{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;background:var(--bg-elev);}
+  .module-head{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;background:none;border:none;color:inherit;text-align:left;cursor:pointer;font-family:inherit;}
+  .module-head:focus-visible{outline:2px solid var(--teal);outline-offset:-2px;}
+  .module-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text-faint);width:20px;flex-shrink:0;}
+  .module-titles{flex:1;min-width:0;}
+  .module-titles .t{font-weight:600;font-size:15px;}
+  .module-titles .o{font-size:12.5px;color:var(--text-dim);margin-top:2px;}
+  .module-progress{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-dim);flex-shrink:0;}
+  .module-progress.done{color:var(--done);}
+  .chevron{width:14px;height:14px;flex-shrink:0;color:var(--text-faint);transition:transform .2s ease;}
+  .module.open .chevron{transform:rotate(90deg);}
+
+  .module-body{max-height:0;overflow:hidden;transition:max-height .25s ease;border-top:1px solid transparent;}
+  .module.open .module-body{border-top-color:var(--border);}
+  .module-body-inner{padding:6px 16px 18px;}
+
+  .group{margin-top:14px;}
+  .group-name{font-size:12px;color:var(--text-faint);margin-bottom:8px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.01em;}
+  .item{display:flex;align-items:flex-start;gap:10px;padding:6px 0;cursor:pointer;}
+  .item input[type=checkbox]{margin-top:3px;width:16px;height:16px;accent-color:var(--amber);flex-shrink:0;cursor:pointer;}
+  .item span{font-size:13.5px;color:var(--text);}
+  .item.checked span{color:var(--text-faint);text-decoration:line-through;text-decoration-color:var(--border);}
+
+  .endpoint{margin-top:16px;border-left:2px solid var(--teal);padding:10px 14px;background:rgba(95,184,176,0.06);border-radius:0 4px 4px 0;}
+  .endpoint .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:4px;}
+  .endpoint p{margin:0;font-size:13px;color:var(--text-dim);}
+
+  .foot{margin-top:36px;text-align:center;font-size:12px;color:var(--text-faint);}
+
+  @media (max-width:480px){
+    .module-titles .o{display:none;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="head">
+      <h1>Perícia Judicial &amp; Computação Forense</h1>
+      <p class="lede">Roteiro de formação em dez módulos — dos fundamentos de TI à elaboração do laudo pericial. Marque o que você já domina para ver onde focar em seguida.</p>
+      <div class="progress-block">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-meta">
+          <span id="progressText">carregando…</span>
+          <button id="resetBtn" class="reset-btn" type="button" title="Apaga todas as marcações">Resetar progresso</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="modulesRoot"></main>
+
+    <footer class="foot">
+      <p>Seu progresso é salvo automaticamente e continua aqui na próxima vez que você abrir este roteiro.</p>
+    </footer>
+  </div>
+
+<script>
+  const PHASES = {
+    1: { label: 'Fase 1 — Fundamentos', duration: '2–3 meses' },
+    2: { label: 'Fase 2 — Programação', duration: '3–4 meses' },
+    3: { label: 'Fase 3 — Computação Forense', duration: '4–6 meses' },
+    4: { label: 'Fase 4 — Engenharia Reversa', duration: '4–6 meses' },
+    5: { label: 'Fase 5 — Perícia Judicial', duration: 'contínua' }
+  };
+
+  const MODULES = [
+    {
+      id:'m1', num:'01', phase:1, title:'Fundamentos de TI',
+      objective:'Base sólida antes de entrar em investigação digital.',
+      groups:[
+        { name:'Arquitetura & hardware', items:['Arquitetura de computadores e CPU (registradores, cache)','Memória RAM: stack, heap, endereçamento, memória virtual'] },
+        { name:'Armazenamento & redes', items:['Sistemas de arquivos e armazenamento (HDD, SSD, partições)','Redes TCP/IP — fundamentos','Virtualização'] },
+        { name:'Base de segurança', items:['Criptografia básica','Linha de comando (Windows e Linux)'] }
+      ],
+      endpoint:'Montar um laboratório virtual com Windows e Linux para experimentação, snapshots e análise segura.'
+    },
+    {
+      id:'m2', num:'02', phase:1, title:'Sistemas Operacionais',
+      objective:'Artefatos e estruturas internas do Windows e do Linux.',
+      groups:[
+        { name:'Windows forensics', items:['Windows Internals (User Mode / Kernel Mode)','Registro do Windows (Registry)','NTFS e Master File Table (MFT)','Prefetch, Amcache e Shimcache','Event Logs (.EVTX)','Serviços e Scheduled Tasks','Windows Defender','PowerShell Logging (Script Block Logging)','LNK Files e Jump Lists'] },
+        { name:'Linux forensics', items:['Linux Internals (kernel, processos)','EXT4 / XFS e estrutura de inodes','Diretório /proc','Logs em /var/log e bash_history','Cronjobs e systemd','Logs de SSH'] }
+      ],
+      endpoint:'Investigar um servidor Linux comprometido e reconstruir cronologicamente a cadeia de eventos.'
+    },
+    {
+      id:'m3', num:'03', phase:1, title:'Redes e Infraestrutura',
+      objective:'Identificar e correlacionar evidências que trafegam pela rede.',
+      groups:[
+        { name:'Fundamentos', items:['TCP/IP, DNS, HTTP/HTTPS','DHCP e SMTP','VPN, Firewall, Proxy, NAT'] },
+        { name:'Investigação de rede', items:['Análise de PCAP','Firewall, proxy e DNS logs','NetFlow e IDS/IPS'] },
+        { name:'Ferramentas', items:['Wireshark e tcpdump','Zeek e Suricata'] }
+      ],
+      endpoint:'Identificar comunicação suspeita, movimentação lateral e conexões com infraestrutura externa.'
+    },
+    {
+      id:'m4', num:'04', phase:2, title:'Programação e Automação',
+      objective:'Saber quando usar cada linguagem — não apenas conhecê-las isoladamente.',
+      groups:[
+        { name:'Bash (Linux)', items:['grep, awk, sed, find, strings','journalctl, ps, netstat, ss, lsof','Automação de coleta de evidências'] },
+        { name:'PowerShell (Windows)', items:['WMI / CIM','Script Block Logging (Event ID 4104)','Desofuscação de comandos em Base64'] },
+        { name:'C', items:['Acesso direto à memória e structs binárias','malloc/free e gerenciamento manual','Syscalls e chamadas WinAPI'] },
+        { name:'C++', items:['Classes, herança e STL','Engenharia reversa de malware complexo','Análise de VTABLE e objetos injetados'] },
+        { name:'Go (Golang)', items:['Compilação estática (binário único)','Goroutines e concorrência massiva','Parsers de rede (.pcap)'] }
+      ],
+      endpoint:'Desenvolver uma ferramenta de triagem capaz de analisar milhares de arquivos e logs simultaneamente.'
+    },
+    {
+      id:'m5', num:'05', phase:3, title:'Computação Forense',
+      objective:'O núcleo técnico da perícia: disco, memória e evidências voláteis.',
+      groups:[
+        { name:'Aquisição de evidências', items:['Disk image (bit-a-bit) com hash de validação','Memory dump','Network capture','Mobile e cloud evidence'] },
+        { name:'Sistemas de arquivos', items:['FAT, NTFS, ReFS (Windows)','EXT4, XFS, BTRFS (Linux)','Journaling, metadata e file carving'] },
+        { name:'Memory forensics', items:['Identificar processos ocultos e DLL injection','Mapear conexões de rede ativas na memória','Reconhecer malware sem arquivo (fileless)'] }
+      ],
+      endpoint:'Reconstruir a linha do tempo completa de um incidente a partir de imagem de disco e dump de memória.'
+    },
+    {
+      id:'m6', num:'06', phase:4, title:'Engenharia Reversa e Malware',
+      objective:'Entender o comportamento de binários maliciosos.',
+      groups:[
+        { name:'Fluxo de análise', items:['Hash → análise estática → análise dinâmica','Disassembly e decompilação','Extração de indicadores de comprometimento (IOCs)'] },
+        { name:'Conhecimentos', items:['Assembly x86/x64','PE Format e ELF Format','Debugging e técnicas de ofuscação'] },
+        { name:'Ferramentas', items:['Ghidra e IDA','x64dbg e WinDbg','Radare2 / Cutter'] }
+      ],
+      endpoint:'Descompilar um executável malicioso, identificar chamadas suspeitas e documentar o comportamento.'
+    },
+    {
+      id:'m7', num:'07', phase:5, title:'Resposta a Incidentes',
+      objective:'Atuar de forma estruturada durante um incidente em andamento.',
+      groups:[
+        { name:'As sete fases', items:['Preparação (ferramentas, playbooks)','Identificação (alertas, logs, indicadores)','Contenção (isolamento, segmentação)','Preservação (RAM, logs, disco, rede)','Erradicação da ameaça','Recuperação e monitoramento','Lições aprendidas'] }
+      ],
+      endpoint:null
+    },
+    {
+      id:'m8', num:'08', phase:5, title:'Cadeia de Custódia',
+      objective:'Garantir que a evidência resista ao escrutínio judicial.',
+      groups:[
+        { name:'Etapas', items:['Coleta → identificação → preservação','Lacração → transporte → armazenamento','Exame → documentação → apresentação'] },
+        { name:'Elementos críticos', items:['Integridade e rastreabilidade','Hashes e controle de acesso','Registro de toda manipulação'] }
+      ],
+      endpoint:null
+    },
+    {
+      id:'m9', num:'09', phase:5, title:'Perícia Judicial',
+      objective:'Compreender o papel formal do perito dentro do processo.',
+      groups:[
+        { name:'Papéis e diferenciação', items:['Perito judicial (auxiliar técnico do juízo)','Assistente técnico (atua para uma das partes)','Diferença frente a analista forense e incident responder'] },
+        { name:'Competências do perito', items:['Imparcialidade e metodologia','Rigor técnico e documentação','Comunicação clara e reprodutibilidade'] }
+      ],
+      endpoint:null
+    },
+    {
+      id:'m10', num:'10', phase:5, title:'Elaboração do Laudo Pericial',
+      objective:'Traduzir a investigação técnica em um documento juridicamente sólido.',
+      groups:[
+        { name:'Estrutura do laudo', items:['Identificação (processo, partes, objeto)','Objetivo — quesitos a responder','Metodologia (ferramentas e procedimentos)','Material analisado','Preservação (hashes e cadeia de custódia)','Análise (artefatos e linha do tempo)','Achados e correlações','Conclusão objetiva aos quesitos'] }
+      ],
+      endpoint:null
+    }
+  ];
+
+  const STORAGE_KEY = 'forense-roadmap-progress-v1';
+  let checked = new Set();
+  let openModules = new Set();
+
+  function itemId(moduleId, gi, ii){ return moduleId + '-g' + gi + '-i' + ii; }
+
+  function countTotals(){
+    let total = 0;
+    MODULES.forEach(m => m.groups.forEach(g => total += g.items.length));
+    return total;
+  }
+
+  function countModuleTotals(m){
+    let total = 0, done = 0;
+    m.groups.forEach((g, gi) => g.items.forEach((it, ii) => {
+      total++;
+      if (checked.has(itemId(m.id, gi, ii))) done++;
+    }));
+    return { total, done };
+  }
+
+  async function loadProgress(){
+    try{
+      const res = await window.storage.get(STORAGE_KEY, false);
+      if (res && res.value){
+        const parsed = JSON.parse(res.value);
+        if (Array.isArray(parsed.checkedIds)) checked = new Set(parsed.checkedIds);
+      }
+    }catch(e){
+      // ainda não existe progresso salvo — segue com tudo desmarcado
+    }
+  }
+
+  async function saveProgress(){
+    try{
+      await window.storage.set(STORAGE_KEY, JSON.stringify({ checkedIds: Array.from(checked) }), false);
+    }catch(e){
+      console.error('Falha ao salvar progresso', e);
+    }
+  }
+
+  function applyOpenHeights(){
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.module').forEach(el => {
+        const body = el.querySelector('.module-body');
+        if (openModules.has(el.dataset.id)){
+          body.style.maxHeight = body.scrollHeight + 'px';
+        } else {
+          body.style.maxHeight = '0px';
+        }
+      });
+    });
+  }
+
+  function renderModule(m){
+    const { total, done } = countModuleTotals(m);
+    const wrap = document.createElement('div');
+    wrap.className = 'module' + (openModules.has(m.id) ? ' open' : '');
+    wrap.dataset.id = m.id;
+
+    const head = document.createElement('button');
+    head.type = 'button';
+    head.className = 'module-head';
+    head.setAttribute('aria-expanded', openModules.has(m.id) ? 'true' : 'false');
+    head.innerHTML =
+      '<span class="module-num">' + m.num + '</span>' +
+      '<span class="module-titles"><div class="t">' + m.title + '</div><div class="o">' + m.objective + '</div></span>' +
+      '<span class="module-progress' + (done === total ? ' done' : '') + '">' + done + '/' + total + '</span>' +
+      '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>';
+    head.addEventListener('click', () => toggleModule(m.id));
+
+    const body = document.createElement('div');
+    body.className = 'module-body';
+    const inner = document.createElement('div');
+    inner.className = 'module-body-inner';
+
+    m.groups.forEach((g, gi) => {
+      const gDiv = document.createElement('div');
+      gDiv.className = 'group';
+      if (g.name){
+        const gName = document.createElement('div');
+        gName.className = 'group-name';
+        gName.textContent = g.name;
+        gDiv.appendChild(gName);
+      }
+      g.items.forEach((text, ii) => {
+        const id = itemId(m.id, gi, ii);
+        const row = document.createElement('label');
+        row.className = 'item' + (checked.has(id) ? ' checked' : '');
+        row.innerHTML = '<input type="checkbox" ' + (checked.has(id) ? 'checked' : '') + ' data-id="' + id + '" data-module="' + m.id + '"><span>' + text + '</span>';
+        gDiv.appendChild(row);
+      });
+      inner.appendChild(gDiv);
+    });
+
+    if (m.endpoint){
+      const ep = document.createElement('div');
+      ep.className = 'endpoint';
+      ep.innerHTML = '<div class="lbl">Desafio prático</div><p>' + m.endpoint + '</p>';
+      inner.appendChild(ep);
+    }
+
+    body.appendChild(inner);
+    wrap.appendChild(head);
+    wrap.appendChild(body);
+    return wrap;
+  }
+
+  function render(){
+    const root = document.getElementById('modulesRoot');
+    root.innerHTML = '';
+    let lastPhase = null;
+    MODULES.forEach(m => {
+      if (m.phase !== lastPhase){
+        lastPhase = m.phase;
+        const ph = PHASES[m.phase];
+        const div = document.createElement('div');
+        div.className = 'phase-divider';
+        div.innerHTML = '<span class="label">' + ph.label + '</span><span class="line"></span><span class="duration">' + ph.duration + '</span>';
+        root.appendChild(div);
+      }
+      root.appendChild(renderModule(m));
+    });
+    updateOverallProgress();
+    applyOpenHeights();
+  }
+
+  function toggleModule(id){
+    if (openModules.has(id)) openModules.delete(id); else openModules.add(id);
+    render();
+  }
+
+  function updateModuleBadge(moduleId){
+    const m = MODULES.find(x => x.id === moduleId);
+    const { total, done } = countModuleTotals(m);
+    const el = document.querySelector('.module[data-id="' + moduleId + '"] .module-progress');
+    if (el){
+      el.textContent = done + '/' + total;
+      el.classList.toggle('done', done === total);
+    }
+  }
+
+  function updateOverallProgress(){
+    const total = countTotals();
+    const done = checked.size;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = done + ' de ' + total + ' competências concluídas · ' + pct + '%';
+  }
+
+  function onCheckboxChange(e){
+    const id = e.target.dataset.id;
+    const moduleId = e.target.dataset.module;
+    if (e.target.checked) checked.add(id); else checked.delete(id);
+    const row = e.target.closest('.item');
+    row.classList.toggle('checked', e.target.checked);
+    updateModuleBadge(moduleId);
+    updateOverallProgress();
+    saveProgress();
+  }
+
+  let resetArmed = false;
+  let resetTimeout;
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    const btn = document.getElementById('resetBtn');
+    if (!resetArmed){
+      resetArmed = true;
+      btn.textContent = 'Confirmar reset?';
+      btn.classList.add('confirm');
+      resetTimeout = setTimeout(() => {
+        resetArmed = false;
+        btn.textContent = 'Resetar progresso';
+        btn.classList.remove('confirm');
+      }, 3000);
+    } else {
+      clearTimeout(resetTimeout);
+      checked.clear();
+      resetArmed = false;
+      btn.textContent = 'Resetar progresso';
+      btn.classList.remove('confirm');
+      render();
+      saveProgress();
+    }
+  });
+
+  document.getElementById('modulesRoot').addEventListener('change', (e) => {
+    if (e.target.matches('input[type=checkbox]')) onCheckboxChange(e);
+  });
+
+  (async function init(){
+    await loadProgress();
+    openModules.add(MODULES[0].id);
+    render();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+:root {
+  /* Paleta baseada na Logo SENA DEVSECOPS */
+  --bg: #05070a; /* Fundo hiper escuro */
+  --bg-elev: #0d1219; /* Fundo dos cards */
+  --border: #1a2332;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --text-faint: #475569;
+  
+  /* Cores da Identidade Visual (Blue Team / Red Team) */
+  --neon-blue: #0088ff;
+  --neon-cyan: #00f0ff;
+  --neon-red: #ff2a3a;
+  --neon-orange: #ff5e00;
+  
+  --done: var(--neon-cyan);
+  --danger: var(--neon-red);
+  --radius: 8px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  background-image: radial-gradient(circle at top center, rgba(0, 136, 255, 0.05), transparent 50%),
+                    radial-gradient(circle at bottom right, rgba(255, 42, 58, 0.05), transparent 50%);
+  color: var(--text);
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.wrap { max-width: 800px; margin: 0 auto; padding: 40px 20px 72px; }
+
+/* Cabeçalho e Identidade Visual */
+.head { margin-bottom: 40px; text-align: center; }
+
+.brand-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.brand-logo {
+  /* max-width: 500px; */
+  width:1920px;
+  height: 1080px;
+  border-radius: 12px;
+  /* Efeito de brilho que combina azul e vermelho */
+  box-shadow: -10px 0 30px rgba(0, 136, 255, 0.15), 10px 0 30px rgba(255, 42, 58, 0.15);
+  border: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 20px;
+}
+
+.terminal-header, .foot-terminal {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  background: rgba(0,0,0,0.4);
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  display: inline-block;
+}
+
+.prompt { color: var(--neon-blue); font-weight: 600; }
+.command { color: var(--text-dim); }
+
+.head h1 {
+  font-size: clamp(24px, 5vw, 34px);
+  font-weight: 700;
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+  background: linear-gradient(90deg, #fff, #a3b8cc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lede {
+  color: var(--text-dim);
+  font-size: 15px;
+  max-width: 60ch;
+  margin: 0 auto 28px;
+}
+
+/* Bloco de Progresso */
+.progress-block {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  background: var(--bg-elev);
+  text-align: left;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.progress-track {
+  height: 8px;
+  border-radius: 4px;
+  background: #000;
+  overflow: hidden;
+  margin-bottom: 14px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Gradiente do Progresso do Azul ao Vermelho simulando a Logo */
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-cyan), var(--neon-orange), var(--neon-red));
+  width: 0%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+.progress-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.progress-meta span { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--text-dim); }
+
+.reset-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-faint);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.reset-btn:hover { border-color: var(--danger); color: var(--danger); background: rgba(255, 42, 58, 0.05); }
+.reset-btn.confirm { border-color: var(--danger); color: #fff; background: var(--danger); box-shadow: 0 0 10px rgba(255, 42, 58, 0.4); }
+
+/* Divisores de Fase */
+.phase-divider { display: flex; align-items: center; gap: 14px; margin: 40px 0 20px; text-align: left; }
+.phase-divider:first-child { margin-top: 0; }
+.phase-divider .label { font-size: 14px; font-weight: 600; color: var(--neon-blue); white-space: nowrap; text-transform: uppercase; letter-spacing: 0.05em; }
+.phase-divider .line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--neon-blue) 0%, transparent 100%); opacity: 0.3; }
+.phase-divider .duration { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); background: var(--bg-elev); border: 1px solid var(--border); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+
+/* Módulos do Checklist */
+.module {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+  background: var(--bg-elev);
+  text-align: left;
+  transition: border-color 0.3s ease;
+}
+.module:hover { border-color: #2a384e; }
+
+.module-head { display: flex; align-items: center; gap: 16px; width: 100%; padding: 16px 20px; background: none; border: none; color: inherit; text-align: left; cursor: pointer; font-family: inherit; }
+.module-head:focus-visible { outline: 2px solid var(--neon-blue); outline-offset: -2px; }
+
+.module-num { font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--neon-red); font-weight: 600; width: 24px; flex-shrink: 0; }
+.module-titles { flex: 1; min-width: 0; }
+.module-titles .t { font-weight: 600; font-size: 16px; }
+.module-titles .o { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+.module-progress { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--text-dim); flex-shrink: 0; background: var(--bg); padding: 2px 8px; border-radius: 4px; }
+.module-progress.done { color: #000; background: var(--done); box-shadow: 0 0 8px rgba(0, 240, 255, 0.4); font-weight: 600; }
+
+.chevron { width: 18px; height: 18px; flex-shrink: 0; color: var(--text-faint); transition: transform 0.3s ease; }
+.module.open .chevron { transform: rotate(90deg); color: var(--neon-blue); }
+
+.module-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid transparent; }
+.module.open .module-body { border-top-color: var(--border); }
+.module-body-inner { padding: 10px 20px 24px; }
+
+/* Grupos e Itens */
+.group { margin-top: 20px; }
+.group-name { font-size: 13px; color: var(--neon-blue); margin-bottom: 12px; font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.02em; text-transform: uppercase; }
+
+.item { display: flex; align-items: flex-start; gap: 12px; padding: 8px 12px; cursor: pointer; border-radius: 6px; transition: background 0.2s ease; margin-left: -12px; margin-right: -12px; }
+.item:hover { background: rgba(255,255,255,0.02); }
+
+/* Custom Checkbox */
+.item input[type=checkbox] {
+  appearance: none;
+  background-color: transparent;
+  margin: 2px 0 0 0;
+  font: inherit;
+  color: var(--text-faint);
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--text-faint);
+  border-radius: 4px;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.item input[type=checkbox]::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--bg-elev);
+  background-color: var(--bg-elev);
+  transform-origin: center;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+.item input[type=checkbox]:checked {
+  background-color: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+}
+.item input[type=checkbox]:checked::before { transform: scale(1); }
+
+.item span { font-size: 14.5px; color: var(--text); line-height: 1.4; transition: color 0.2s; }
+.item.checked span { color: var(--text-faint); text-decoration: line-through; text-decoration-color: var(--border); }
+
+/* Endpoint / Desafio Prático */
+.endpoint { margin-top: 24px; border-left: 2px solid var(--neon-red); padding: 12px 16px; background: linear-gradient(90deg, rgba(255, 42, 58, 0.08) 0%, transparent 100%); border-radius: 0 6px 6px 0; }
+.endpoint .lbl { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--neon-red); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+.endpoint p { margin: 0; font-size: 14px; color: var(--text-dim); }
+
+.foot { margin-top: 48px; text-align: center; font-size: 13px; color: var(--text-faint); }
+.foot p { margin-top: 16px; }
+
+@media (max-width: 480px) {
+  .module-titles .o { display: none; }
+  .head h1 { font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
